@@ -1,0 +1,51 @@
+@import './tokens.css';
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+html, body, #root { height: 100%; }
+
+body {
+  font-family: var(--font-body);
+  color: var(--content-primary);
+  background: #0a1828; /* only visible as letterboxing on wide screens */
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+input, textarea { font-family: inherit; }
+a { color: inherit; text-decoration: none; }
+ul { list-style: none; }
+
+/* ── App container — fills the device viewport ────────────────── */
+.app {
+  position: relative;
+  width: 100%;
+  max-width: 480px;       /* centred & letterboxed on wide screens only */
+  height: 100dvh;
+  margin: 0 auto;
+  background: var(--bg-primary);
+  overflow: hidden;
+}
+
+/* scrollable body of a screen */
+.screen-body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  position: relative;
+}
+.screen-body::-webkit-scrollbar { width: 0; height: 0; }
+
+.pad { padding: 0 20px; }
+
+/* utility */
+.row { display: flex; align-items: center; }
+.col { display: flex; flex-direction: column; }
+.spacer { flex: 1; }
+.muted { color: var(--content-secondary); }
+.center { text-align: center; }
+
+/* focus ring for testing accessibility */
+:focus-visible { outline: 2px solid var(--brand-primary); outline-offset: 2px; }
