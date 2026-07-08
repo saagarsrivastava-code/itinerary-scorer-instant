@@ -150,6 +150,16 @@ export function Photo({ src, alt = '', tag, fallback, className = '', style, chi
   )
 }
 
+/* ── Live score badge (app bar) — recolours as the score moves ── */
+export function ScoreBadge({ value }) {
+  const band = scoreBand(value)
+  return (
+    <span className="scorebadge" style={{ color: band.color, background: band.tint }}>
+      {value}<span className="scorebadge__denom">/100</span>
+    </span>
+  )
+}
+
 /* ── Score delta pill ─────────────────────────────────────────── */
 export function ScorePill({ from, to, arrow }) {
   return (

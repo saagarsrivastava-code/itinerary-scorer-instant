@@ -1,24 +1,51 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Screen } from '../components/Chrome.jsx'
 import { Button, Sheet } from '../components/ui.jsx'
 import Icon from '../components/Icon.jsx'
 import { useFlow } from '../state/FlowContext.jsx'
+import heroIllustration from '../assets/hero-illustration.png'
+
+const ROTATING_WORDS = ['good?', 'efficient?', 'worth it?']
+
+/* Rotating word — mirrors the fade/slide cycle from the reference landing page. */
+function RotatingWord() {
+  const [i, setI] = useState(0)
+  useEffect(() => {
+    const t = setInterval(() => setI((n) => (n + 1) % ROTATING_WORDS.length), 2600)
+    return () => clearInterval(t)
+  }, [])
+  return (
+    <span style={{ position: 'relative', display: 'inline-block', height: '1.2em', minWidth: '6.5ch', overflow: 'hidden', verticalAlign: 'bottom' }}>
+      <AnimatePresence>
+        <motion.span
+          key={i}
+          initial={{ y: '110%', opacity: 0 }}
+          animate={{ y: '0%', opacity: 1 }}
+          exit={{ y: '-110%', opacity: 0 }}
+          transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+          style={{ position: 'absolute', left: 0, top: 0, whiteSpace: 'nowrap' }}
+        >
+          {ROTATING_WORDS[i]}
+        </motion.span>
+      </AnimatePresence>
+    </span>
+  )
+}
 
 export default function UploadEntry() {
   const navigate = useNavigate()
-  const { setSource } = useFlow()
+  const { setSource, variant } = useFlow()
   const [sheet, setSheet] = useState(false)
 
-  function startSample() {
-    setSource('Sample · Paris 5-day')
-    navigate('/preview')
-  }
+  // Instant AI skips the parse-confirmation screen entirely — upload goes
+  // straight into the questionnaire (wireframe flow). Expert review keeps it.
+  const afterUpload = variant === 'noQuestions' ? '/scoring' : variant === 'instant' ? '/questions' : '/preview'
 
   return (
     <Screen>
-      <div className="screen-body pad" style={{ display: 'flex', flexDirection: 'column' }}>
+      <div className="screen-body pad" style={{ display: 'flex', flexDirection: 'column', paddingBottom: 'calc(20px + env(safe-area-inset-bottom))' }}>
         <div style={{ paddingTop: 14 }} className="wordmark">
           <span className="wordmark__dot"><Icon name="compass" size={17} /></span>
           <span className="wordmark__name">scapia<span> trips</span></span>
@@ -33,9 +60,9 @@ export default function UploadEntry() {
             variants={{ hide: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } }}
             style={{ font: '700 33px/1.18 var(--font-body)', letterSpacing: '-0.01em' }}
           >
-            Your itinerary,<br />
+            You built the itinerary.<br />
             <span style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontStyle: 'italic', color: 'var(--brand-primary)' }}>
-              made better.
+              Is it actually <RotatingWord />
             </span>
           </motion.h1>
           <motion.p
@@ -43,8 +70,15 @@ export default function UploadEntry() {
             className="t-p-large muted"
             style={{ marginTop: 14 }}
           >
-            Upload your travel plan and get a personalised score, smarter routes, and curated suggestions — all bookable in one tap.
+            Most self-planned trips have hidden gaps. Find yours before you fly.
           </motion.p>
+
+          <motion.img
+            variants={{ hide: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } }}
+            src={heroIllustration}
+            alt="Preview of an itinerary scored 72/100 with pace, crowd and route ratings"
+            style={{ display: 'block', width: '100%', maxWidth: 330, margin: '30px auto 0' }}
+          />
         </motion.div>
 
         <div className="spacer" style={{ minHeight: 28 }} />
@@ -54,47 +88,10 @@ export default function UploadEntry() {
         <Button full variant="ghost" onClick={() => { setSource('Pasted text'); setSheet(true) }}>
           Paste as text instead
         </Button>
-        <button className="btn btn--text" style={{ margin: '14px auto 0', textDecoration: 'underline' }} onClick={startSample}>
-          Try with a sample itinerary
-        </button>
-
-        <div className="trust" style={{ marginTop: 24 }}>
-          {[
-            { i: 'sparkle', l: 'Personalised score' },
-            { i: 'route', l: 'Route optimisation' },
-            { i: 'pin', l: 'Bookable suggestions' },
-          ].map((t) => (
-            <div className="trust__item" key={t.l}>
-              <span className="trust__icn"><Icon name={t.i} size={20} /></span>
-              <span className="t-lb-sm muted">{t.l}</span>
-            </div>
-          ))}
-        </div>
-        <div style={{ height: 16 }} />
       </div>
 
-      <TabBar />
-      <UploadSheet open={sheet} onClose={() => setSheet(false)} onConfirm={() => navigate('/preview')} />
+      <UploadSheet open={sheet} onClose={() => setSheet(false)} onConfirm={() => navigate(afterUpload)} />
     </Screen>
-  )
-}
-
-function TabBar() {
-  const tabs = [
-    { i: 'home', l: 'Home', active: true },
-    { i: 'list', l: 'My Itineraries' },
-    { i: 'compass', l: 'Discover' },
-    { i: 'user', l: 'Profile' },
-  ]
-  return (
-    <nav className="tabbar">
-      {tabs.map((t) => (
-        <div key={t.l} className={`tab${t.active ? ' is-active' : ''}`}>
-          <Icon name={t.i} size={22} />
-          <span>{t.l}</span>
-        </div>
-      ))}
-    </nav>
   )
 }
 
@@ -137,7 +134,7 @@ function UploadSheet({ open, onClose, onConfirm }) {
           <div className="filechip">
             <span className="filechip__icn"><Icon name="doc" size={22} /></span>
             <div style={{ flex: 1 }}>
-              <div className="t-shd-sm">paris-trip.pdf</div>
+              <div className="t-shd-sm">phuket-krabi-trip.pdf</div>
               <div className="t-lb-sm muted">1.2 MB</div>
             </div>
             {state === 'file' && <button onClick={reset} aria-label="Remove"><Icon name="close" size={18} /></button>}

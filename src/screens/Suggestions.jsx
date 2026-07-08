@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Screen, AppBar } from '../components/Chrome.jsx'
@@ -7,16 +7,43 @@ import Icon from '../components/Icon.jsx'
 import { SUGGESTIONS, FILTERS, CATEGORIES } from '../data/trip.js'
 import { useFlow } from '../state/FlowContext.jsx'
 
+// Suggestion types that matter most for a given pace/offbeat combination —
+// used to float the most relevant fixes to the top once the "no questions"
+// flow's questionnaire has been answered.
+function relevantTypes(pace, offbeat) {
+  const tags = []
+  if (pace === 'Packed') tags.push('Route', 'Timing')
+  if (pace === 'Unhurried') tags.push('Stays')
+  if (offbeat === 'High') tags.push('Stops')
+  return tags
+}
+
 export default function Suggestions() {
   const navigate = useNavigate()
-  const { applySuggestion, isApplied } = useFlow()
+  const { applySuggestion, isApplied, variant, params } = useFlow()
   const [filter, setFilter] = useState('All')
 
-  const list = SUGGESTIONS.filter((s) => filter === 'All' || s.type === filter)
+  const relevant = variant === 'noQuestions' ? relevantTypes(params.pace, params.offbeat) : []
+
+  const list = useMemo(() => {
+    const filtered = SUGGESTIONS.filter((s) => filter === 'All' || s.type === filter)
+    if (!relevant.length) return filtered
+    return [...filtered].sort((a, b) => (relevant.includes(b.type) ? 1 : 0) - (relevant.includes(a.type) ? 1 : 0))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filter, variant, params.pace, params.offbeat])
 
   return (
     <Screen>
       <AppBar title="Suggested improvements" onBack={() => navigate('/score')} />
+
+      {relevant.length > 0 && (
+        <div className="pad" style={{ paddingTop: 4 }}>
+          <div className="banner banner--info">
+            <Icon name="sparkle" size={14} style={{ flexShrink: 0, marginTop: 1 }} />
+            <span>Sorted using the preferences you just picked.</span>
+          </div>
+        </div>
+      )}
 
       <div className="pad" style={{ paddingBottom: 4 }}>
         <div className="teaser-row" style={{ gap: 8 }}>

@@ -5,17 +5,21 @@ import { Screen, AppBar, Footer } from '../components/Chrome.jsx'
 import { Button, CategoryPill } from '../components/ui.jsx'
 import Icon from '../components/Icon.jsx'
 import { TRIP } from '../data/trip.js'
+import { useFlow } from '../state/FlowContext.jsx'
 
 export default function ParsedPreview() {
   const navigate = useNavigate()
+  const { variant } = useFlow()
   const [empty, setEmpty] = useState(false)
   const [editing, setEditing] = useState(null)
 
-  if (empty) return <EmptyParse onRetry={() => setEmpty(false)} onBack={() => navigate('/')} />
+  const backTarget = variant === 'noQuestions' ? '/score' : '/'
+
+  if (empty) return <EmptyParse onRetry={() => setEmpty(false)} onBack={() => navigate(backTarget)} />
 
   return (
     <Screen>
-      <AppBar title="Your itinerary" subtitle="Is this right? Tap any item to edit." onBack={() => navigate('/')} />
+      <AppBar title="Your itinerary" subtitle="Is this right? Tap any item to edit." onBack={() => navigate(backTarget)} />
       <div className="screen-body pad" style={{ paddingBottom: 90 }}>
         <div className="banner banner--warn" style={{ marginTop: 4 }}>
           <Icon name="warning" size={16} style={{ flexShrink: 0, marginTop: 1 }} />
@@ -63,7 +67,9 @@ export default function ParsedPreview() {
       </button>
 
       <Footer>
-        <Button full onClick={() => navigate('/questions')}>Looks good — continue</Button>
+        <Button full onClick={() => navigate(variant === 'noQuestions' ? '/score' : '/questions')}>
+          {variant === 'noQuestions' ? 'Done' : 'Looks good — continue'}
+        </Button>
       </Footer>
     </Screen>
   )

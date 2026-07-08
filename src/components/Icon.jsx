@@ -23,7 +23,15 @@ const PATHS = {
   compass: <><circle cx="12" cy="12" r="8.5" /><path d="M15.5 8.5l-2 5-5 2 2-5z" /></>,
   user: <><circle cx="12" cy="8" r="3.4" /><path d="M5.5 20a6.5 6.5 0 0113 0" /></>,
   doc: <><path d="M7 3h7l4 4v14H7z" /><path d="M14 3v4h4M9 13h6M9 16h6" /></>,
+  phone: <path d="M5 4h3l1.6 4.2-2 1.4a11 11 0 005 5l1.4-2 4.2 1.6V19a2 2 0 01-2.2 2A15 15 0 013 6.2 2 2 0 015 4z" />,
+  chat: <path d="M4.5 5.5h15v9.5h-9.5L5.5 19v-3.5h-1z" />,
+  send: <path d="M4 12l16-7-7 16-2.5-6.5L4 12z" />,
+  mic: <><rect x="9.5" y="3.5" width="5" height="10" rx="2.5" /><path d="M6 11a6 6 0 0012 0M12 17v3.5" /></>,
+  speaker: <><path d="M4 9h3l4-3.5v13L7 15H4z" /><path d="M15 9a4 4 0 010 6" /></>,
   image: <><rect x="4" y="5" width="16" height="14" rx="2" /><circle cx="9" cy="10" r="1.6" /><path d="M5 17l4.5-4 3 2.5L16 11l3 3.5" /></>,
+  wallet: <><rect x="3" y="7" width="18" height="12" rx="2" /><path d="M3 10h18" /><circle cx="16" cy="14.5" r="1" fill="currentColor" stroke="none" /></>,
+  sun: <><circle cx="12" cy="12" r="4" /><path d="M12 3v2M12 19v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M3 12h2M19 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" /></>,
+  heart: <path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0112 5.5 5.5 5.5 0 0121.5 12c-2.5 4.5-9.5 9-9.5 9z" />,
 }
 
 export default function Icon({ name, size = 22, stroke = 1.8, className, style }) {

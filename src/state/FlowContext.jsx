@@ -7,17 +7,29 @@ export function FlowProvider({ children }) {
   // Questionnaire answers
   const [answers, setAnswers] = useState({
     party: 'Partner',
-    pace: 3,
-    interests: ['Food & dining', 'Hidden gems'],
-    budget: 'Mid-range',
-    flexibility: 'Mostly set',
   })
 
   // Which suggestion ids have been accepted/applied to the itinerary
   const [applied, setApplied] = useState([]) // [{id, scoreDelta}]
 
-  // Upload source label, used on preview ("paris-trip.pdf" / "Pasted text")
-  const [source, setSource] = useState('paris-trip.pdf')
+  // Upload source label, used on preview ("phuket-krabi-trip.pdf" / "Pasted text")
+  const [source, setSource] = useState('phuket-krabi-trip.pdf')
+
+  // Standalone "Instant AI" prototype (v1 — AI scores in ~5s). The variant is fixed
+  // here; the other approaches live in sibling itinerary-scorer-* apps.
+  const [variant, setVariant] = useState('instant')
+
+  // Inferred trip parameters for the 'noQuestions' variant — adjusting these
+  // (via the questionnaire) recomputes the inferred params live.
+  const [params, setParams] = useState({
+    pace: 'Balanced',
+    crowd: 'Busy',
+    food: 'Non-vegetarian',
+    photogenic: 'High',
+    offbeat: 'Medium',
+    season: 'Cool & dry (Nov–Feb)',
+  })
+  const setParam = useCallback((key, value) => setParams((p) => ({ ...p, [key]: value })), [])
 
   const applySuggestion = useCallback((s) => {
     setApplied((prev) => (prev.find((a) => a.id === s.id) ? prev : [...prev, { id: s.id, scoreDelta: s.scoreDelta }]))
@@ -40,10 +52,12 @@ export function FlowProvider({ children }) {
       answers, setAnswers,
       applied, applySuggestion, isApplied,
       source, setSource,
+      variant, setVariant,
+      params, setParam,
       baseScore, newScore,
       reset,
     }),
-    [answers, applied, applySuggestion, isApplied, source, newScore, reset],
+    [answers, applied, applySuggestion, isApplied, source, variant, params, setParam, newScore, reset],
   )
 
   return <FlowContext.Provider value={value}>{children}</FlowContext.Provider>
