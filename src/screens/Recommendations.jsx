@@ -129,7 +129,7 @@ function ChangeCard({ s, anchored, applied, onApply, onDetails }) {
         <div className="chg__row chg__row--old">
           <span className="chg__marker">{isAdd ? 'Gap' : 'Now'}</span>
           <span className="chg__name">
-            {s.current.name}
+            <span className={isAdd ? undefined : 'chg__strike'}>{s.current.name}</span>
             {s.current.meta && <span className="chg__meta">{s.current.meta}</span>}
           </span>
         </div>
