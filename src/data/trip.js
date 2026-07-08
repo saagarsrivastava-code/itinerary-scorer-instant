@@ -1,16 +1,23 @@
 // Dummy data for the prototype — Phuket & Krabi, Thailand, 5 days. Values mirror the wireframes.
 // Photos: Unsplash CDN (keyless, ?w=… sized). Swap for licensed assets before release.
 
-const IMG = (id, w = 800) => `https://images.unsplash.com/photo-${id}?w=${w}&q=80&auto=format&fit=crop`
+// Bundled locally (src/assets) so images work offline and inside the
+// CSP-restricted artifact build — no external requests.
+import imgWatChalong from '../assets/wat-chalong.jpg'
+import imgIslandTour from '../assets/island-tour.jpg'
+import imgSuayRestaurant from '../assets/suay-restaurant.jpg'
+import imgKataResort from '../assets/kata-resort.jpg'
+import imgTigerCave from '../assets/tiger-cave.jpg'
+import imgMapSnippet from '../assets/map-snippet.jpg'
 
 export const IMAGES = {
-  watChalong:   IMG('1528181304800-259b08848526'),
-  islandTour:   IMG('1552465011-b4e21bf6e79a'),
-  suayRestaurant: IMG('1544148103-0773bf10d330'),
-  bigBuddha:    IMG('1528181304800-259b08848526'),
-  kataResort:   IMG('1571003123894-1f0594d2b5d9'),
-  tigerCave:    IMG('1552733407-5d5c46c3bb3b'),
-  mapSnippet:   IMG('1473951574080-01fe45ec8643'),
+  watChalong:   imgWatChalong,
+  islandTour:   imgIslandTour,
+  suayRestaurant: imgSuayRestaurant,
+  bigBuddha:    imgWatChalong,
+  kataResort:   imgKataResort,
+  tigerCave:    imgTigerCave,
+  mapSnippet:   imgMapSnippet,
 }
 
 export const CATEGORIES = {
