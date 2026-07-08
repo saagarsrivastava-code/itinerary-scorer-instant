@@ -9,6 +9,7 @@ import imgSuayRestaurant from '../assets/suay-restaurant.jpg'
 import imgKataResort from '../assets/kata-resort.jpg'
 import imgTigerCave from '../assets/tiger-cave.jpg'
 import imgMapSnippet from '../assets/map-snippet.jpg'
+import imgExpertAvatar from '../assets/expert-avatar.jpg'
 
 export const IMAGES = {
   watChalong:   imgWatChalong,
@@ -251,7 +252,7 @@ export const FILTERS = ['All', 'Route', 'Stops', 'Timing', 'Stays']
 export const EXPERT = {
   name: 'Aanya Rao',
   title: 'Senior travel expert · Thailand specialist',
-  avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&q=80&auto=format&fit=crop&crop=faces',
+  avatar: imgExpertAvatar,
   reviewed: '1,400+ itineraries reviewed',
   eta: 'Usually ready in ~2 hours',
 }
