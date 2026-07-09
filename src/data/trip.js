@@ -462,7 +462,7 @@ export function getScoreBreakdown({ pace, crowd, food, offbeat, transport }) {
       { stopIds: ['s1'], tag: 'Crowd check', text: "Big Buddha's tour-bus rush peaks 09:00–11:00 — an 08:30 start skips most of it." },
       { stopIds: ['s6'], tag: 'Crowd check', text: 'Bangla Road is at its busiest after 19:00 — go early or embrace the buzz.' },
     ]},
-    { key: 'offbeat', label: 'Offbeat spots', ...offbeatRow, issues: [
+    { key: 'offbeat', label: 'Spots compatibility', ...offbeatRow, issues: [
       { stopIds: ['s1'], tag: 'Offbeat check', text: 'One of the busiest attractions on the island — firmly on the tourist trail.', good: offbeat === 'More popular' },
       { stopIds: ['s8'], tag: 'Offbeat check', text: 'The 1,237-step climb keeps crowds away — the most offbeat stop on your plan.', good: true },
     ]},
