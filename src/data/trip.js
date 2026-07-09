@@ -445,13 +445,12 @@ export function getScoreBreakdown({ pace, crowd, food, offbeat, transport }) {
       { stopIds: ['s1', 's2'], tag: paceTag, text: 'Back-to-back Big Buddha at 09:30 and Blue Elephant at 13:00 is hectic — travel between them takes ~45 mins.' },
       { stopIds: ['s4', 's5', 's6'], tag: paceTag, text: 'The island tour, aquarium and night market stretch Day 2 into a 12-hour day.' },
     ]},
-    { key: 'crowd', label: 'Crowd level', ...crowdRow, issues: [
-      { stopIds: ['s1'], tag: 'Crowd check', text: "Big Buddha's tour-bus rush peaks 09:00–11:00 — an 08:30 start skips most of it." },
-      { stopIds: ['s6'], tag: 'Crowd check', text: 'Bangla Road is at its busiest after 19:00 — go early or embrace the buzz.' },
-    ]},
     { key: 'route', label: 'Route efficiency', ...routeRow, issues: [
       { stopIds: ['s4', 's5'], tag: 'Route check', text: 'Day 2 heads west for the island tour, then doubles back east past your hotel for the aquarium — ~40 mins of backtracking.' },
       ...(publicTransport ? [{ stopIds: ['s7'], tag: 'Transport check', text: 'Railay is boat-access only with no public transport — this leg will need a private transfer.' }] : []),
+    ]},
+    { key: 'stay', label: 'Stay compatibility', ...stayRow, issues: [
+      { stopIds: ['s3'], tag: 'Stay check', text: 'JW Marriott sits ~25 mins from your Phuket stops; a base nearer Patong would shorten daily transfers.' },
     ]},
     { key: 'food', label: 'Food diversity', ...foodRow, issues: [
       { stopIds: ['s2'], tag: 'Food check', text: 'Blue Elephant is royal Thai fine dining — a standout meal.', good: true },
@@ -459,8 +458,9 @@ export function getScoreBreakdown({ pace, crowd, food, offbeat, transport }) {
         text: vegetarianish ? `Bangla Road stalls are seafood-heavy — ${food.toLowerCase()} options thin out late.` : 'Some of the best street food on the island.',
         good: !vegetarianish },
     ]},
-    { key: 'stay', label: 'Stay compatibility', ...stayRow, issues: [
-      { stopIds: ['s3'], tag: 'Stay check', text: 'JW Marriott sits ~25 mins from your Phuket stops; a base nearer Patong would shorten daily transfers.' },
+    { key: 'crowd', label: 'Crowd level', ...crowdRow, issues: [
+      { stopIds: ['s1'], tag: 'Crowd check', text: "Big Buddha's tour-bus rush peaks 09:00–11:00 — an 08:30 start skips most of it." },
+      { stopIds: ['s6'], tag: 'Crowd check', text: 'Bangla Road is at its busiest after 19:00 — go early or embrace the buzz.' },
     ]},
     { key: 'offbeat', label: 'Offbeat spots', ...offbeatRow, issues: [
       { stopIds: ['s1'], tag: 'Offbeat check', text: 'One of the busiest attractions on the island — firmly on the tourist trail.', good: offbeat === 'More popular' },
