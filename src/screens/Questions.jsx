@@ -99,7 +99,7 @@ export default function Questions() {
 function QTitle({ children, hint }) {
   return (
     <>
-      <h2 className="t-hd-large" style={{ marginTop: 6 }}>{children}</h2>
+      <h2 className="t-hd-med" style={{ marginTop: 6 }}>{children}</h2>
       {hint && <div className="t-p-small muted" style={{ marginTop: 6 }}>{hint}</div>}
     </>
   )
