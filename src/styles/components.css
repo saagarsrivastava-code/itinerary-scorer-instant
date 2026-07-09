@@ -529,12 +529,13 @@
 .chg {
   position: relative;
   margin: 6px 0 14px 52px;
-  border: 1px solid var(--border-opaque);
+  border: 1.5px dashed var(--border-strong);
   background: var(--bg-primary);
   border-radius: var(--r-md);
-  box-shadow: var(--shadow-card);
   padding: 12px 13px;
 }
+/* orange action button on suggestion cards keeps flat (no CTA shadow) */
+.chg .btn--primary { box-shadow: none; }
 .chg--anchored::before {
   content: ''; position: absolute; left: -15px; top: -9px; width: 13px; height: 32px;
   border-left: 2px dashed var(--border-strong);
