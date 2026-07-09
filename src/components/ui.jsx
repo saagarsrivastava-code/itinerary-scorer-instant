@@ -1,5 +1,5 @@
-import { motion, AnimatePresence } from 'framer-motion'
-import { useEffect, useState } from 'react'
+import { motion, AnimatePresence, useAnimationControls } from 'framer-motion'
+import { useEffect, useRef, useState } from 'react'
 import Icon from './Icon.jsx'
 import { CATEGORIES, scoreBand } from '../data/trip.js'
 
@@ -150,13 +150,42 @@ export function Photo({ src, alt = '', tag, fallback, className = '', style, chi
   )
 }
 
-/* ── Live score badge (app bar) — recolours as the score moves ── */
+/* Count a number up to `target` over ~500ms whenever it increases. */
+function useCountUp(target, duration = 550) {
+  const [n, setN] = useState(target)
+  const prev = useRef(target)
+  useEffect(() => {
+    const from = prev.current
+    if (from === target) return
+    let raf, start
+    const step = (t) => {
+      if (start === undefined) start = t
+      const p = Math.min(1, (t - start) / duration)
+      const eased = 1 - Math.pow(1 - p, 3)
+      setN(Math.round(from + (target - from) * eased))
+      if (p < 1) raf = requestAnimationFrame(step)
+      else prev.current = target
+    }
+    raf = requestAnimationFrame(step)
+    return () => cancelAnimationFrame(raf)
+  }, [target, duration])
+  return n
+}
+
+/* ── Live score badge (app bar) — counts up + pulses as the score moves ── */
 export function ScoreBadge({ value }) {
-  const band = scoreBand(value)
+  const shown = useCountUp(value)
+  const band = scoreBand(shown)
+  const controls = useAnimationControls()
+  const first = useRef(true)
+  useEffect(() => {
+    if (first.current) { first.current = false; return }
+    controls.start({ scale: [1, 1.18, 1], transition: { duration: 0.45, ease: 'easeOut' } })
+  }, [value, controls])
   return (
-    <span className="scorebadge" style={{ color: band.color, background: band.tint }}>
-      {value}<span className="scorebadge__denom">/100</span>
-    </span>
+    <motion.span className="scorebadge" style={{ color: band.color, background: band.tint }} animate={controls}>
+      {shown}<span className="scorebadge__denom">/100</span>
+    </motion.span>
   )
 }
 

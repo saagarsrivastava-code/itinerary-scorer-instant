@@ -83,10 +83,11 @@
   background: var(--bg-primary); box-shadow: var(--shadow-card);
 }
 .socialproof__avatars { display: flex; flex-shrink: 0; }
-.socialproof__avatars span {
-  width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--bg-primary);
+.socialproof__avatars img {
+  width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--bg-primary);
+  object-fit: cover; background: var(--bg-secondary);
 }
-.socialproof__avatars span + span { margin-left: -11px; }
+.socialproof__avatars img + img { margin-left: -11px; }
 .socialproof__stat { font: 500 13px/1.35 var(--font-body); color: var(--content-primary); text-wrap: balance; }
 .socialproof__stat b { font-weight: 700; }
 .socialproof__sub { font: 400 11.5px/1.35 var(--font-body); color: var(--content-tertiary); margin-top: 2px; }

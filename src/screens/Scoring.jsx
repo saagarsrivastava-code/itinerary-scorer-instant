@@ -71,9 +71,6 @@ function InstantScoring() {
           <div className="dim__track">
             <motion.div className="dim__fill" style={{ background: 'var(--brand-primary)' }} initial={{ width: '8%' }} animate={{ width: '96%' }} transition={{ duration: 5 }} />
           </div>
-          <button className="btn btn--text" style={{ margin: '12px auto 0', fontSize: 11, opacity: 0.5 }} onClick={() => setError(true)}>
-            (demo: simulate error)
-          </button>
         </div>
       </div>
     </Screen>

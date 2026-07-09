@@ -8,6 +8,9 @@ import Icon from '../components/Icon.jsx'
 import { TRIP, getScoreBreakdown } from '../data/trip.js'
 import { useFlow } from '../state/FlowContext.jsx'
 import ParamsOverview from './ParamsOverview.jsx'
+import face1 from '../assets/face-1.jpg'
+import face2 from '../assets/face-2.jpg'
+import face3 from '../assets/face-3.jpg'
 
 export default function ScoreOverview() {
   const { variant } = useFlow()
@@ -44,9 +47,9 @@ function StandardScoreOverview() {
           initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }}
         >
           <div className="socialproof__avatars">
-            <span style={{ background: 'linear-gradient(135deg,#F2A65A,#E4572E)' }} />
-            <span style={{ background: 'linear-gradient(135deg,#5AA9E6,#2E86AB)' }} />
-            <span style={{ background: 'linear-gradient(135deg,#7FB069,#468C3F)' }} />
+            <img src={face1} alt="" />
+            <img src={face2} alt="" />
+            <img src={face3} alt="" />
           </div>
           <div className="socialproof__text">
             <div className="socialproof__stat">Scored against <b>5,000+ Thailand trips</b></div>

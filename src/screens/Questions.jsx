@@ -28,7 +28,7 @@ export default function Questions() {
         <div className="row" style={{ justifyContent: 'space-between' }}>
           <button className="appbar__back" style={{ marginLeft: -8 }} onClick={back} aria-label="Back"><Icon name="back" /></button>
           <span className="t-p-small muted">{step + 1} of {QUESTIONS_TOTAL}</span>
-          <button className="btn btn--text" style={{ padding: 4 }} onClick={next}>Skip</button>
+          <span aria-hidden style={{ width: 28 }} />
         </div>
         <div style={{ marginTop: 12 }}><Stepper current={step + 1} total={QUESTIONS_TOTAL} /></div>
       </div>

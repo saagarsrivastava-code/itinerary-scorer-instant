@@ -70,7 +70,7 @@ export default function UploadEntry() {
             className="t-p-large muted"
             style={{ marginTop: 14 }}
           >
-            Most self-planned trips have hidden gaps. Find yours before you fly.
+            Most self-planned trips have hidden gaps. Find yours before you book.
           </motion.p>
 
           <motion.img
