@@ -19,8 +19,7 @@ export default function Questions() {
 
   const answered = [
     !!answers.party && !!params.duration && !!params.month,
-    !!params.pace,
-    !!params.food && !!params.offbeat && !!params.transport,
+    !!params.pace && !!params.food && !!params.offbeat && !!params.transport,
   ][step]
 
   return (
@@ -60,13 +59,12 @@ export default function Questions() {
               </>
             )}
             {step === 1 && (
-              <QOptionList
-                title="How do you like to travel?" hint="This changes how packed each day feels."
-                options={PARAM_OPTIONS.pace} value={params.pace} onSelect={(v) => setParam('pace', v)}
-              />
-            )}
-            {step === 2 && (
               <>
+                <QOptionList
+                  title="How do you like to travel?" hint="This changes how packed each day feels."
+                  options={PARAM_OPTIONS.pace} value={params.pace} onSelect={(v) => setParam('pace', v)}
+                />
+                <div style={{ height: 30 }} />
                 <QOptionList
                   title="What's your food preference?" hint="We'll check how well the trip caters to it."
                   options={PARAM_OPTIONS.food} value={params.food} onSelect={(v) => setParam('food', v)}

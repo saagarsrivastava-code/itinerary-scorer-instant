@@ -265,7 +265,7 @@ export const EXPERT_STAGES = [
   { key: 'ready',     label: 'Score ready',          sub: 'Putting together your suggestions' },
 ]
 
-export const QUESTIONS_TOTAL = 3
+export const QUESTIONS_TOTAL = 2
 
 // Loading status messages (Screen 5)
 export const LOADING_MESSAGES = [
