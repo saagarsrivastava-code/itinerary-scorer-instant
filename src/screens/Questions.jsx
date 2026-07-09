@@ -7,8 +7,6 @@ import Icon from '../components/Icon.jsx'
 import { useFlow } from '../state/FlowContext.jsx'
 import { QUESTIONS_TOTAL, PARAM_OPTIONS } from '../data/trip.js'
 
-const PARTY = ['Solo', 'Partner', 'Friends', 'Family (kids)', 'Family (teens)', 'Parents', 'Group (6+)']
-
 export default function Questions() {
   const navigate = useNavigate()
   const { answers, setAnswers, params, setParam, variant } = useFlow()
@@ -20,9 +18,9 @@ export default function Questions() {
   function next() { step === QUESTIONS_TOTAL - 1 ? navigate(variant === 'noQuestions' ? '/suggestions' : '/scoring') : setStep(step + 1) }
 
   const answered = [
-    !!answers.party && !!params.season,
-    !!params.pace && !!params.crowd,
-    !!params.food && !!params.photogenic && !!params.offbeat,
+    !!answers.party && !!params.duration && !!params.month,
+    !!params.pace,
+    !!params.food && !!params.offbeat && !!params.transport,
   ][step]
 
   return (
@@ -46,28 +44,26 @@ export default function Questions() {
             {step === 0 && (
               <>
                 <QOptionList
-                  title="Who's joining you?"
-                  options={PARTY} value={answers.party} onSelect={(v) => set('party', v)}
+                  title="Who are you going with?"
+                  options={PARAM_OPTIONS.party} value={answers.party} onSelect={(v) => set('party', v)}
                 />
                 <div style={{ height: 30 }} />
                 <QOptionList
-                  title="When are you travelling?" hint="Helps us gauge weather and crowds."
-                  options={PARAM_OPTIONS.season} value={params.season} onSelect={(v) => setParam('season', v)}
+                  title="How long?"
+                  options={PARAM_OPTIONS.duration} value={params.duration} onSelect={(v) => setParam('duration', v)}
+                />
+                <div style={{ height: 30 }} />
+                <QOptionList
+                  title="What month?"
+                  options={PARAM_OPTIONS.month} value={params.month} onSelect={(v) => setParam('month', v)}
                 />
               </>
             )}
             {step === 1 && (
-              <>
-                <QOptionList
-                  title="How do you like to travel?" hint="This changes how packed each day feels."
-                  options={PARAM_OPTIONS.pace} value={params.pace} onSelect={(v) => setParam('pace', v)}
-                />
-                <div style={{ height: 30 }} />
-                <QOptionList
-                  title="How do you feel about crowds?" hint="Helps us flag busy, touristy stops."
-                  options={PARAM_OPTIONS.crowd} value={params.crowd} onSelect={(v) => setParam('crowd', v)}
-                />
-              </>
+              <QOptionList
+                title="How do you like to travel?" hint="This changes how packed each day feels."
+                options={PARAM_OPTIONS.pace} value={params.pace} onSelect={(v) => setParam('pace', v)}
+              />
             )}
             {step === 2 && (
               <>
@@ -77,13 +73,13 @@ export default function Questions() {
                 />
                 <div style={{ height: 30 }} />
                 <QOptionList
-                  title="How photogenic should it be?" hint="For that Instagram-worthy itinerary."
-                  options={PARAM_OPTIONS.photogenic} value={params.photogenic} onSelect={(v) => setParam('photogenic', v)}
+                  title="More offbeat or more popular spots?" hint="Hidden gems vs. the well-trodden path."
+                  options={PARAM_OPTIONS.offbeat} value={params.offbeat} onSelect={(v) => setParam('offbeat', v)}
                 />
                 <div style={{ height: 30 }} />
                 <QOptionList
-                  title="Popular spots or offbeat ones?" hint="Hidden gems vs. the well-trodden path."
-                  options={PARAM_OPTIONS.offbeat} value={params.offbeat} onSelect={(v) => setParam('offbeat', v)}
+                  title="How do you prefer to get around?" hint="Affects route efficiency and which routes are bookable."
+                  options={PARAM_OPTIONS.transport} value={params.transport} onSelect={(v) => setParam('transport', v)}
                 />
               </>
             )}

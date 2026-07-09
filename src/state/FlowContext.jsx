@@ -19,15 +19,17 @@ export function FlowProvider({ children }) {
   // here; the other approaches live in sibling itinerary-scorer-* apps.
   const [variant, setVariant] = useState('instant')
 
-  // Inferred trip parameters for the 'noQuestions' variant — adjusting these
-  // (via the questionnaire) recomputes the inferred params live.
+  // Trip parameters gathered by the questionnaire (crowd is no longer asked —
+  // it's inferred from the plan — but kept here so the score breakdown can
+  // reference it).
   const [params, setParams] = useState({
     pace: 'Balanced',
-    crowd: 'Busy',
+    crowd: 'Busy',          // inferred, not asked
     food: 'Non-vegetarian',
-    photogenic: 'High',
-    offbeat: 'Medium',
-    season: 'Cool & dry (Nov–Feb)',
+    offbeat: 'Mix of both',
+    transport: 'Private transfer',
+    duration: '4–6 days',
+    month: 'Dec',
   })
   const setParam = useCallback((key, value) => setParams((p) => ({ ...p, [key]: value })), [])
 

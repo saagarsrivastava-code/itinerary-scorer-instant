@@ -5,7 +5,7 @@ import { Screen, AppBar, Footer } from '../components/Chrome.jsx'
 import { Button, ScoreDial, Sheet } from '../components/ui.jsx'
 import { ExpertScoreCard, ExpertChatSheet, ExpertCallOverlay } from '../components/ExpertContact.jsx'
 import Icon from '../components/Icon.jsx'
-import { SCORE, TRIP, getScoreBreakdown } from '../data/trip.js'
+import { TRIP, getScoreBreakdown } from '../data/trip.js'
 import { useFlow } from '../state/FlowContext.jsx'
 import ParamsOverview from './ParamsOverview.jsx'
 
@@ -39,13 +39,20 @@ function StandardScoreOverview() {
       <div className="screen-body pad" style={{ paddingBottom: 96 }}>
         <ScoreDial value={baseScore} />
 
-        <motion.p
-          className="t-p-large center"
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}
-          style={{ marginTop: 16, color: 'var(--neutral-grey-700)' }}
+        <motion.div
+          className="socialproof"
+          initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }}
         >
-          {SCORE.summary}
-        </motion.p>
+          <div className="socialproof__avatars">
+            <span style={{ background: 'linear-gradient(135deg,#F2A65A,#E4572E)' }} />
+            <span style={{ background: 'linear-gradient(135deg,#5AA9E6,#2E86AB)' }} />
+            <span style={{ background: 'linear-gradient(135deg,#7FB069,#468C3F)' }} />
+          </div>
+          <div className="socialproof__text">
+            <div className="socialproof__stat">Scored against <b>5,000+ Thailand trips</b></div>
+            <div className="socialproof__sub">Based on real reviews &amp; experiences from Scapia travellers</div>
+          </div>
+        </motion.div>
 
         <h3 className="t-hd-sm" style={{ marginTop: 24 }}>What's working and what isn't</h3>
         <div className="t-p-small muted" style={{ marginTop: 4 }}>Tap a parameter to see where it shows up in your plan.</div>
@@ -88,7 +95,7 @@ function scoreColor10(score) {
   return score >= 7 ? 'var(--feedback-positive)' : score >= 5 ? 'var(--feedback-warning)' : 'var(--feedback-negative)'
 }
 
-const PARAM_ICONS = { pace: 'clock', crowd: 'user', route: 'route', food: 'star', photogenic: 'image', offbeat: 'compass' }
+const PARAM_ICONS = { pace: 'clock', crowd: 'user', route: 'route', food: 'star', stay: 'home', offbeat: 'compass' }
 
 /* Score-out-of-10 card: icon chip + label, score bar, and a
    preference-tied note underneath. Tappable. */

@@ -280,12 +280,14 @@ export const LOADING_MESSAGES = [
 // picked up from the upload as a set of read-only inferred params. They can
 // only be changed by going through the (3-screen) questionnaire.
 export const PARAM_OPTIONS = {
+  party: ['Solo', 'Partner', 'Friends', 'Family (kids)', 'With my parents', 'Group (5+)'],
+  duration: ['2–3 days', '4–6 days', '1–2 weeks', '2+ weeks'],
+  month: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', "I'm flexible"],
   pace: ['Unhurried', 'Balanced', 'Packed'],
   crowd: ['Chill', 'Busy', 'Very busy'],
-  food: ['Vegetarian', 'Non-vegetarian', 'All cuisines'],
-  photogenic: ['Low', 'Medium', 'High'],
-  offbeat: ['Low', 'Medium', 'High'],
-  season: ['Cool & dry (Nov–Feb)', 'Hot (Mar–May)', 'Rainy (Jun–Oct)'],
+  food: ['Vegetarian', 'Non-vegetarian', 'Vegan', 'All cuisines'],
+  offbeat: ['More offbeat', 'More popular', 'Mix of both'],
+  transport: ['Public transport', 'Private transfer', 'No preference'],
 }
 
 // Each inferred param is displayed as {label, tone, pct} — tone drives the
@@ -409,30 +411,32 @@ export function paramScoreColor(value) {
 // preference. Each row also carries `issues`: stop-anchored callouts shown in
 // the bottom sheet against the date-wise itinerary (wireframe: "SINCE YOU
 // PREFER RELAXED PACE — back-to-back stops … is hectic").
-export function getScoreBreakdown({ pace, crowd, food, photogenic, offbeat }) {
+export function getScoreBreakdown({ pace, crowd, food, offbeat, transport }) {
   const paceRow =
     pace === 'Unhurried' ? { score: 4, note: 'Based on your preference, this pace is too fast.' } :
     pace === 'Packed'    ? { score: 8, note: 'You asked for a packed trip — this plan keeps every day full.' } :
                            { score: 6, note: 'Broadly the balanced pace you asked for, but Day 2 runs long.' }
   const crowdRow =
-    crowd === 'Chill'     ? { score: 8, note: 'Since you wanted to avoid crowds, this plan is well suited to you.' } :
-    crowd === 'Very busy' ? { score: 7, note: 'Most stops are lively and popular — matches what you asked for.' } :
+    crowd === 'Chill'     ? { score: 6, note: 'A few of your stops peak with tour-bus crowds — early starts would help.' } :
+    crowd === 'Very busy' ? { score: 8, note: 'Mostly lively, popular spots — plenty of buzz on this plan.' } :
                             { score: 7, note: 'A workable mix of busy landmarks and quieter stops.' }
-  const routeRow = { score: 5, note: 'Day 2 doubles back along the coast road — a reorder saves ~40 mins.' }
+  const publicTransport = transport === 'Public transport'
+  const routeRow = publicTransport
+    ? { score: 4, note: 'Day 2 backtracks, and a few legs have no public transport — some routes will need a private transfer.' }
+    : { score: 5, note: 'Day 2 doubles back along the coast road — a reorder saves ~40 mins.' }
   const foodRow =
     food === 'Vegetarian'   ? { score: 7, note: 'Good vegetarian coverage, though the night market is seafood-heavy.' } :
+    food === 'Vegan'        ? { score: 5, note: 'Vegan options are thin outside the fine-dining stops — worth pre-booking.' } :
     food === 'All cuisines' ? { score: 6, note: 'Almost entirely Thai — little variety beyond local cuisine.' } :
                               { score: 8, note: 'A strong mix of Thai seafood, fine dining and street food.' }
-  const photoRow =
-    photogenic === 'Low' ? { score: 8, note: 'More scenic than you asked for — no complaints.' } :
-                           { score: 8, note: 'Phi Phi and Railay are among the most photogenic stops in Thailand.' }
+  const stayRow = { score: 6, note: 'Your base is ~25 mins from most stops — a more central stay would cut daily transit.' }
   const offbeatRow =
-    offbeat === 'High' ? { score: 3, note: 'You asked for hidden gems, but most stops are mainstream favourites.' } :
-    offbeat === 'Low'  ? { score: 8, note: 'Sticks to the well-known spots — exactly what you asked for.' } :
-                         { score: 5, note: 'Mostly popular spots — one or two quieter corners would balance it.' }
+    offbeat === 'More offbeat' ? { score: 3, note: 'You asked for more offbeat spots, but most stops are mainstream favourites.' } :
+    offbeat === 'More popular' ? { score: 8, note: 'Sticks to the well-known highlights — exactly what you asked for.' } :
+                                 { score: 5, note: 'Mostly popular spots — one or two quieter corners would balance the mix.' }
 
   const paceTag = `Since you prefer a ${(pace || 'Balanced').toLowerCase()} pace`
-  const crowdTag = crowd === 'Chill' ? 'Since you want to avoid crowds' : 'Crowd check'
+  const vegetarianish = food === 'Vegetarian' || food === 'Vegan'
 
   // Each issue lists the exact stops it concerns (`stopIds`) so the sheet
   // can show just that slice of the plan instead of the whole itinerary.
@@ -442,24 +446,24 @@ export function getScoreBreakdown({ pace, crowd, food, photogenic, offbeat }) {
       { stopIds: ['s4', 's5', 's6'], tag: paceTag, text: 'The island tour, aquarium and night market stretch Day 2 into a 12-hour day.' },
     ]},
     { key: 'crowd', label: 'Crowd level', ...crowdRow, issues: [
-      { stopIds: ['s1'], tag: crowdTag, text: "Big Buddha's tour-bus rush peaks 09:00–11:00 — an 08:30 start skips most of it." },
-      { stopIds: ['s6'], tag: crowdTag, text: 'Bangla Road is at its busiest after 19:00 — go early or embrace the buzz.' },
+      { stopIds: ['s1'], tag: 'Crowd check', text: "Big Buddha's tour-bus rush peaks 09:00–11:00 — an 08:30 start skips most of it." },
+      { stopIds: ['s6'], tag: 'Crowd check', text: 'Bangla Road is at its busiest after 19:00 — go early or embrace the buzz.' },
     ]},
     { key: 'route', label: 'Route efficiency', ...routeRow, issues: [
       { stopIds: ['s4', 's5'], tag: 'Route check', text: 'Day 2 heads west for the island tour, then doubles back east past your hotel for the aquarium — ~40 mins of backtracking.' },
+      ...(publicTransport ? [{ stopIds: ['s7'], tag: 'Transport check', text: 'Railay is boat-access only with no public transport — this leg will need a private transfer.' }] : []),
     ]},
     { key: 'food', label: 'Food diversity', ...foodRow, issues: [
       { stopIds: ['s2'], tag: 'Food check', text: 'Blue Elephant is royal Thai fine dining — a standout meal.', good: true },
-      { stopIds: ['s6'], tag: food === 'Vegetarian' ? 'Since you eat vegetarian' : 'Food check',
-        text: food === 'Vegetarian' ? 'Bangla Road stalls are seafood-heavy — vegetarian options thin out late.' : 'Some of the best street food on the island.',
-        good: food !== 'Vegetarian' },
+      { stopIds: ['s6'], tag: vegetarianish ? `Since you eat ${food.toLowerCase()}` : 'Food check',
+        text: vegetarianish ? `Bangla Road stalls are seafood-heavy — ${food.toLowerCase()} options thin out late.` : 'Some of the best street food on the island.',
+        good: !vegetarianish },
     ]},
-    { key: 'photogenic', label: 'Photogenic spots', ...photoRow, issues: [
-      { stopIds: ['s4'], tag: 'Photo spot', text: 'Phi Phi viewpoints are postcard Thailand.', good: true },
-      { stopIds: ['s7'], tag: 'Photo spot', text: "Railay's karst cliffs are the best photo stop of the trip.", good: true },
+    { key: 'stay', label: 'Stay compatibility', ...stayRow, issues: [
+      { stopIds: ['s3'], tag: 'Stay check', text: 'JW Marriott sits ~25 mins from your Phuket stops; a base nearer Patong would shorten daily transfers.' },
     ]},
     { key: 'offbeat', label: 'Offbeat spots', ...offbeatRow, issues: [
-      { stopIds: ['s1'], tag: 'Offbeat check', text: 'One of the busiest attractions on the island — firmly on the tourist trail.', good: offbeat === 'Low' },
+      { stopIds: ['s1'], tag: 'Offbeat check', text: 'One of the busiest attractions on the island — firmly on the tourist trail.', good: offbeat === 'More popular' },
       { stopIds: ['s8'], tag: 'Offbeat check', text: 'The 1,237-step climb keeps crowds away — the most offbeat stop on your plan.', good: true },
     ]},
   ]
