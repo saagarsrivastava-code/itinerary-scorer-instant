@@ -14,7 +14,7 @@ import { useFlow } from '../state/FlowContext.jsx'
 // badge in the app bar updates live as suggestions are applied.
 export default function Recommendations() {
   const navigate = useNavigate()
-  const { params, applySuggestion, isApplied, newScore, applied } = useFlow()
+  const { params, applySuggestion, isApplied, newScore } = useFlow()
 
   // Suggestions that don't attach to an existing stop, grouped by day
   // ("All nights" → Day 1).
@@ -89,7 +89,7 @@ export default function Recommendations() {
 
       <Footer>
         <Button full onClick={() => navigate('/updated')}>
-          Proceed to booking{applied.length > 0 ? ` · ${applied.length} added` : ''}
+          Proceed to booking
         </Button>
       </Footer>
     </Screen>
