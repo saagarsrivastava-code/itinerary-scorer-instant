@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import { Screen, AppBar, Footer } from '../components/Chrome.jsx'
 import { Button, CategoryPill, ScoreBadge } from '../components/ui.jsx'
 import Icon from '../components/Icon.jsx'
-import { TRIP, SUGGESTIONS, PACE_TIPS } from '../data/trip.js'
+import { TRIP, SUGGESTIONS } from '../data/trip.js'
 import { useFlow } from '../state/FlowContext.jsx'
 
 // Recommendations shown inline within the itinerary (wireframe): each stop
@@ -14,7 +14,7 @@ import { useFlow } from '../state/FlowContext.jsx'
 // badge in the app bar updates live as suggestions are applied.
 export default function Recommendations() {
   const navigate = useNavigate()
-  const { params, applySuggestion, isApplied, newScore } = useFlow()
+  const { applySuggestion, isApplied, newScore } = useFlow()
 
   // Suggestions that don't attach to an existing stop, grouped by day
   // ("All nights" → Day 1).
@@ -39,11 +39,6 @@ export default function Recommendations() {
       />
 
       <div className="screen-body pad" style={{ paddingBottom: 96 }}>
-        <div className="banner banner--warn" style={{ marginTop: 4 }}>
-          <Icon name="sparkle" size={16} style={{ flexShrink: 0, marginTop: 1 }} />
-          <span><strong>Since you prefer a {params.pace.toLowerCase()} pace:</strong> {PACE_TIPS[params.pace] || PACE_TIPS.Balanced}</span>
-        </div>
-
         {TRIP.days.map((day) => {
           const dayKey = day.label.split(' — ')[0]
           const floating = floatingByDay[dayKey] || []
